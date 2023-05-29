@@ -1,0 +1,29 @@
+{
+	"name": "project",
+	"version": "0.0.1",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite dev",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^2.0.0",
+		"@sveltejs/kit": "^1.5.0",
+		"autoprefixer": "^10.4.14",
+		"daisyui": "^2.51.6",
+		"firebase": "^9.22.1",
+		"postcss": "^8.4.21",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.8.1",
+		"svelte": "^3.54.0",
+		"sveltefire": "^0.2.3",
+		"tailwindcss": "^3.3.2",
+		"vite": "^4.3.9"
+	},
+	"dependencies": {
+		"firebase-tools": "^12.2.1",
+		"openai": "^3.2.1"
+	}
+}
