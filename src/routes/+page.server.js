@@ -1,10 +1,12 @@
-import { SECRET_API_KEY, SECRET_ORG } from '$env/static/private'
+// import { SECRET_API_KEY, SECRET_ORG } from '$env/static/private'
+
+import { key, org } from '$lib/secrets';
 
 export const load = async () => {
   return {
      config: {
-       organization: SECRET_ORG,
-       apiKey: SECRET_API_KEY,
+       organization: org,
+       apiKey: key,
      }
   };
 };
