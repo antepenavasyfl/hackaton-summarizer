@@ -1,0 +1,7 @@
+.env.*
+
+deploy/*secrets*.yml
+.idea/*
+.vscode/*
+.DS_Store
+.dccache
