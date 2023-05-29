@@ -1,11 +1,14 @@
 <script>
    import { db } from '$lib/firebase'; 
    import { collection, addDoc } from 'firebase/firestore';
-
-   import { openai } from '$lib/openai';
    // import { docStore } from 'sveltefire';
 	import './global.css';
+   import { Configuration, OpenAIApi } from "openai";
+   export let data;
+   const { config } = data;
 
+   const configuration = new Configuration(config);
+   const openai = new OpenAIApi(configuration);
    let systemMessage = "Create short and concise summary from this text: "
    let categories = '';
    let systemCategoriesExamples = "And now add suitable category/s. Follow this format: Summary: {summary} Label: {politics, sport, weather, etc}.";
@@ -15,7 +18,8 @@
    let summary = '';
    let generating = false;
    let prompt = '';
-
+   let error = '';
+   
    async function handleClick() {
       generating = true;
       try {
@@ -26,21 +30,22 @@
         response = completion.data.choices[0].message;
         categories = response.content.split("Label: ")[1].split(", ");
                   
-      
         const labelIndex = response.content.indexOf("Label: ");
         summary = response.content.substring(0, labelIndex).replace("Summary: ", "");
         prompt = systemMessage + value + systemCategoriesExamples;
         value = '';
         generating = false;
-      } catch (error) {
-        if (error.response) {
-          console.log(error.response.status);
-          console.log(error.response.data);
+        error = '';
+      } catch (e) {
+        if (e.response) {
+          error = e.response.data.error;
+          console.log(e.response.status);
+          console.log(e.response.data.error);
         } else {
-          console.log(error.message);
+          error = e.message;
+          console.log(e.message);
         }  
         generating = false;
-        response = error.message;
         value = '';
       }      
    }
@@ -69,7 +74,6 @@
 <div class="container">
    <!-- <a href="/history">Saved articles</a> -->
    <h1 class="text-accent">Summarizer & Categorizer</h1>
-   
    <p>Analyze and summarize long articles or any text you want!</p>
    
    <ul class="steps w-full">
@@ -86,8 +90,10 @@
    </button>
    
    <h3>RESULT:</h3>
-   
-   {#if response}
+
+   {#if error}
+      <p class="text-orange-600">{error.code}</p>
+   {:else if response}
       <p>{summary}</p>
    {:else}
       <p class="note">*Type your text or article in <code>`textarea`</code> to get short summary.</p>
@@ -112,7 +118,6 @@
      <p class="p-1">Build with sveltekit and firebase. Using daisy-ui & tailwind utility framework. Summarized and categorized with Openai API</p>
    </div>
 </div>
-
 
 <style>
    h1 {
